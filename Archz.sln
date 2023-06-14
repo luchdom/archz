@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{45DCF76B-E4F4-4C7A-8C8F-12118CE392EC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{70718E69-7561-4079-9C62-B3A5FDAB3C63}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		README.md = README.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{93F8D1AB-7483-4EBC-9A15-62E149C61BF0}"
 EndProject
