@@ -1,72 +1,102 @@
 
 using Archz.Auth.Api.Data;
+using Archz.Auth.Api.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace Archz.Auth.Api
+namespace Archz.Auth.Api;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder(args);
+    
+        //builder.Services
+        //    .AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
-            // Add services to the container.
+        // Add services to the container.
+      
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services
+            .AddEndpointsApiExplorer()
+            .AddSwaggerGen()
+            .AddDbContext<ApplicationDbContext>(options =>
+            {
+                //var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
+                // options.UseSqlServer(connectionString)
+                // Configure the context to use sqlite.
+                options.UseSqlite($"Filename={Path.Combine(Path.GetTempPath(), "archz-auth.sqlite3")}");
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services
-                .AddEndpointsApiExplorer()
-                .AddSwaggerGen()
-                .AddDbContext<ApplicationDbContext>(options =>
-                {
-                    // Configure the context to use sqlite.
-                    options.UseSqlite($"Filename={Path.Combine(Path.GetTempPath(), "openiddict-aridka-server.sqlite3")}");
+                // Register the entity sets needed by OpenIddict.
+                // Note: use the generic overload if you need
+                // to replace the default OpenIddict entities.
+                options.UseOpenIddict<Application, Authorization, Scope, Token, long>();
+            })
+            .AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders()
+                .AddDefaultUI();
 
-                    // Register the entity sets needed by OpenIddict.
-                    // Note: use the generic overload if you need
-                    // to replace the default OpenIddict entities.
-                    options.UseOpenIddict();
-                })
-                // OpenIddict offers native integration with Quartz.NET to perform scheduled tasks
-                // (like pruning orphaned authorizations/tokens from the database) at regular intervals.
-                .AddQuartz(options =>
-                {
-                    options.UseMicrosoftDependencyInjectionJobFactory();
-                    options.UseSimpleTypeLoader();
-                    options.UseInMemoryStore();
-                })
-                .AddQuartzHostedService(options => options.WaitForJobsToComplete = true)
-                .AddOpenIddict()
-                .AddCore(options =>
-                {
-                    // Configure OpenIddict to use the Entity Framework Core stores and models.
-                    // Note: call ReplaceDefaultEntities() to replace the default OpenIddict entities.
-                    options.UseEntityFrameworkCore()
-                           .UseDbContext<ApplicationDbContext>();
+        //builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+        builder.Services
+            // OpenIddict offers native integration with Quartz.NET to perform scheduled tasks
+            // (like pruning orphaned authorizations/tokens from the database) at regular intervals.
+            .AddQuartz(options =>
+            {
+                options.UseMicrosoftDependencyInjectionJobFactory();
+                options.UseSimpleTypeLoader();
+                options.UseInMemoryStore();
+            })
+            .AddQuartzHostedService(options => options.WaitForJobsToComplete = true)
+            .AddOpenIddict()
+            // Register the OpenIddict core components.
+            .AddCore(options =>
+            {
+                // Configure OpenIddict to use the Entity Framework Core stores and models.
+                // Note: call ReplaceDefaultEntities() to replace the default OpenIddict entities.
+                options.UseEntityFrameworkCore()
+                       .UseDbContext<ApplicationDbContext>()
+                       .ReplaceDefaultEntities<Application, Authorization, Scope, Token, long>();
 
-                    // Enable Quartz.NET integration.
-                    options.UseQuartz();
-                })
-                .AddServer(options =>
-                {
-                    // Enable the token endpoint.
-                    options.SetTokenEndpointUris("connect/token");
+                // Enable Quartz.NET integration.
+                options.UseQuartz();
+            })
 
-                    // Enable the client credentials flow.
-                    options.AllowClientCredentialsFlow();
+            // Register the OpenIddict server components.
+            .AddServer(options =>
+            {
+                // Enable the authorization, logout, token and userinfo endpoints.
+                options.SetAuthorizationEndpointUris("connect/authorize")
+                       .SetLogoutEndpointUris("connect/logout")
+                       .SetTokenEndpointUris("connect/token")
+                       .SetUserinfoEndpointUris("connect/userinfo");
 
-                    // Register the signing and encryption credentials.
-                    options.AddDevelopmentEncryptionCertificate()
-                           .AddDevelopmentSigningCertificate();
+                // Mark the "email", "profile" and "roles" scopes as supported scopes.
+                options.RegisterScopes(Scopes.Email, Scopes.Profile, Scopes.Roles);
 
-                    // Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
-                    options.UseAspNetCore()
-                           .EnableTokenEndpointPassthrough();
-                })
+                // Note: this sample only uses the authorization code flow but you can enable
+                // the other flows if you need to support implicit, password or client credentials.
+                options.AllowAuthorizationCodeFlow()
+                       .AllowRefreshTokenFlow();
 
-                // Register the OpenIddict validation components.
-                .AddValidation(options =>
+                // Register the signing and encryption credentials.
+                options.AddDevelopmentEncryptionCertificate()
+                       .AddDevelopmentSigningCertificate();
+
+                // Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
+                options.UseAspNetCore()
+                       .EnableAuthorizationEndpointPassthrough()
+                       .EnableLogoutEndpointPassthrough()
+                       .EnableTokenEndpointPassthrough()
+                       .EnableUserinfoEndpointPassthrough()
+                       .EnableStatusCodePagesIntegration();
+            })
+
+            // Register the OpenIddict validation components.
+            .AddValidation(options =>
                 {
                     // Import the configuration from the local OpenIddict server instance.
                     options.UseLocalServer();
@@ -74,28 +104,39 @@ namespace Archz.Auth.Api
                     // Register the ASP.NET Core host.
                     options.UseAspNetCore();
                 });
-            // Register the worker responsible for seeding the database.
-            // Note: in a real world application, this step should be part of a setup script.
-            builder.Services.AddHostedService<SeedWorker>();
 
-            var app = builder.Build();
+        builder.Services.AddControllersWithViews();
+        builder.Services.AddRazorPages();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+        // Register the worker responsible for seeding the database.
+        // Note: in a real world application, this step should be part of a setup script.
+        builder.Services.AddHostedService<SeedWorker>();
 
-            app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseAuthorization();
+        var app = builder.Build();
 
-
-            app.MapControllers();
-
-            app.Run();
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
+        else
+        {
+            app.UseHsts();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseStaticFiles();
+        app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapControllers();
+        app.MapDefaultControllerRoute();
+        app.MapRazorPages();
+
+        app.Run();
     }
 }

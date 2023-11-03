@@ -11,11 +11,12 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("f16a6bb0-9c1f-4361-8d0c-950df2767a62")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Archz.Auth.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+479bc389582a008256ae500fe2ee210820e48e82")]
 [assembly: System.Reflection.AssemblyProductAttribute("Archz.Auth.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Archz.Auth.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

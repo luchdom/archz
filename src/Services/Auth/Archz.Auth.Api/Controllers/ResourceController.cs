@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Archz.Auth.Api.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
 using OpenIddict.Validation.AspNetCore;
@@ -7,31 +10,31 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Archz.Auth.Api.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class ResourceController : ControllerBase
+[Route("api")]
+public class ResourceController : Controller
 {
-    private readonly IOpenIddictApplicationManager _applicationManager;
-    public ResourceController(IOpenIddictApplicationManager applicationManager)
-       => _applicationManager = applicationManager;
+    private readonly UserManager<User> _userManager;
+
+    public ResourceController(UserManager<User> userManager)
+        => _userManager = userManager;
 
     [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
     [HttpGet("message")]
     public async Task<IActionResult> GetMessage()
     {
-        var subject = User.FindFirst(Claims.Subject)?.Value;
-        if (string.IsNullOrEmpty(subject))
+        var user = await _userManager.FindByIdAsync(User.GetClaim(Claims.Subject));
+        if (user is null)
         {
-            return BadRequest();
+            return Challenge(
+                authenticationSchemes: OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme,
+                properties: new AuthenticationProperties(new Dictionary<string, string>
+                {
+                    [OpenIddictValidationAspNetCoreConstants.Properties.Error] = Errors.InvalidToken,
+                    [OpenIddictValidationAspNetCoreConstants.Properties.ErrorDescription] =
+                        "The specified access token is bound to an account that no longer exists."
+                }));
         }
 
-        var application = await _applicationManager.FindByClientIdAsync(subject);
-        if (application == null)
-        {
-            return BadRequest();
-        }
-
-        return Content($"{await _applicationManager.GetDisplayNameAsync(application)} has been successfully authenticated.");
+        return Content($"{user.UserName} has been successfully authenticated.");
     }
 }
-

@@ -1,41 +1,61 @@
-﻿using Archz.Auth.Api.Data;
+using Archz.Auth.Api.Data;
 using OpenIddict.Abstractions;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace Archz.Auth.Api
+namespace Archz.Auth.Api;
+
+public class SeedWorker : IHostedService
 {
-    public class SeedWorker : IHostedService
+    private readonly IServiceProvider _serviceProvider;
+
+    public SeedWorker(IServiceProvider serviceProvider)
+        => _serviceProvider = serviceProvider;
+
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
-        private readonly IServiceProvider _serviceProvider;
+        await using var scope = _serviceProvider.CreateAsyncScope();
 
-        public SeedWorker(IServiceProvider serviceProvider)
-            => _serviceProvider = serviceProvider;
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await context.Database.EnsureCreatedAsync(cancellationToken);
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
+
+        if (await manager.FindByClientIdAsync("authz-client", cancellationToken) == null)
         {
-            await using var scope = _serviceProvider.CreateAsyncScope();
-
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            await context.Database.EnsureCreatedAsync();
-
-            var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
-
-            if (await manager.FindByClientIdAsync("console") == null)
+            await manager.CreateAsync(new OpenIddictApplicationDescriptor
             {
-                await manager.CreateAsync(new OpenIddictApplicationDescriptor
+                ClientId = "authz-client",
+                //ClientSecret = "901564A5-E7FE-42CB-B10D-61EF6A8F3654",
+                ConsentType = ConsentTypes.Explicit,
+                DisplayName = "AuthZ client application",
+                Type = ClientTypes.Public,
+                PostLogoutRedirectUris =
                 {
-                    ClientId = "console",
-                    ClientSecret = "388D45FA-B36B-4988-BA59-B187D329C207",
-                    DisplayName = "My client application",
-                    Permissions =
+                    new Uri("https://localhost:7281/authentication/logout-callback")
+                },
+                RedirectUris =
                 {
+                    new Uri("https://oidcdebugger.com/debug")
+                },
+                Permissions =
+                {
+                    Permissions.Endpoints.Authorization,
+                    Permissions.Endpoints.Logout,
                     Permissions.Endpoints.Token,
-                    Permissions.GrantTypes.ClientCredentials
+                    Permissions.GrantTypes.AuthorizationCode,
+                    Permissions.GrantTypes.RefreshToken,
+                    Permissions.ResponseTypes.Code,
+                    Permissions.Scopes.Email,
+                    Permissions.Scopes.Profile,
+                    Permissions.Scopes.Roles
                 }
-                });
-            }
+                //Requirements =
+                //{
+                //    Requirements.Features.ProofKeyForCodeExchange
+                //}
+            }, cancellationToken);
         }
-
-        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
     }
+
+    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 }

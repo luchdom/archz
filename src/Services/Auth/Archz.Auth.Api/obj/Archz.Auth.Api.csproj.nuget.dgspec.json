@@ -39,6 +39,9 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "default"
         }
       },
       "frameworks": {
@@ -60,7 +63,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100-rc.1.23455.8\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -103,47 +106,80 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "default"
         }
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.13, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[7.0.13, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[7.0.1, )"
+              "version": "[7.0.13, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.5, )"
+              "version": "[7.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.13, )"
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
-              "version": "[7.0.5, )"
+              "version": "[7.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.13, )"
             },
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
-              "version": "[1.17.0, )"
+              "version": "[1.19.5, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[7.0.11, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[7.0.6, )"
             },
             "OpenIddict.AspNetCore": {
               "target": "Package",
-              "version": "[4.2.0, )"
+              "version": "[4.9.0, )"
             },
             "OpenIddict.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[4.2.0, )"
+              "version": "[4.9.0, )"
             },
             "OpenIddict.Quartz": {
               "target": "Package",
-              "version": "[4.2.0, )"
+              "version": "[4.9.0, )"
             },
             "Quartz.Extensions.Hosting": {
               "target": "Package",
-              "version": "[3.6.2, )"
+              "version": "[3.7.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[6.4.0, )"
+              "version": "[6.5.0, )"
+            },
+            "System.Linq.Async": {
+              "target": "Package",
+              "version": "[6.0.1, )"
             }
           },
           "imports": [
@@ -165,7 +201,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100-rc.1.23455.8\\RuntimeIdentifierGraph.json"
         }
       }
     }
