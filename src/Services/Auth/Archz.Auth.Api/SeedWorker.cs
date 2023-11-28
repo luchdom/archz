@@ -1,4 +1,5 @@
 using Archz.Auth.Api.Data;
+using Archz.Auth.Api.Models;
 using OpenIddict.Abstractions;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
@@ -20,22 +21,41 @@ public class SeedWorker : IHostedService
 
         var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
 
-        if (await manager.FindByClientIdAsync("authz-client", cancellationToken) == null)
+        await CreateClients(manager, cancellationToken);
+    }
+
+    private static async Task CreateClients(IOpenIddictApplicationManager manager, CancellationToken cancellationToken)
+    {
+        var clients = new List<Client>()
+        {
+            new ("authz-web-client", "AuthZ web-client application","https://localhost:7281/"),
+            new ("authz-oidc-debugger", "AuthZ oidc-debugger","https://localhost:7281/authentication/logout-callback", "https://oidcdebugger.com/debug" ),
+            new ("authz-postman-local-client", "AuthZ postman","https://localhost:7281/authentication/logout-callback", "https://oauth.pstmn.io/v1/callback")
+        };
+
+        foreach (var client in clients)
+        {
+            await CreateClient(manager, client, cancellationToken);
+        }
+    }
+
+    private static async Task CreateClient(IOpenIddictApplicationManager manager, Client client, CancellationToken cancellationToken)
+    {
+        if (await manager.FindByClientIdAsync(client.Id, cancellationToken) == null)
         {
             await manager.CreateAsync(new OpenIddictApplicationDescriptor
             {
-                ClientId = "authz-client",
-                //ClientSecret = "901564A5-E7FE-42CB-B10D-61EF6A8F3654",
+                ClientId = client.Id,
                 ConsentType = ConsentTypes.Explicit,
-                DisplayName = "AuthZ client application",
+                DisplayName = client.DisplayName,
                 Type = ClientTypes.Public,
                 PostLogoutRedirectUris =
                 {
-                    new Uri("https://localhost:7281/authentication/logout-callback")
+                    new Uri(client.PostLogoutRedirectUris)
                 },
                 RedirectUris =
                 {
-                    new Uri("https://oidcdebugger.com/debug")
+                    new Uri(client.RedirectUris)
                 },
                 Permissions =
                 {

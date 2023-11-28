@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Archz.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cd42418c6f48b26e1d67b2dd6a79d08c90f58a13")]
 [assembly: System.Reflection.AssemblyProductAttribute("Archz.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Archz.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -28,7 +28,7 @@ public class Program
                 //var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
                 // options.UseSqlServer(connectionString)
                 // Configure the context to use sqlite.
-                options.UseSqlite($"Filename={Path.Combine(Path.GetTempPath(), "archz-auth.sqlite3")}");
+                options.UseSqlite("DataSource=archz-auth.sqlite3");
 
                 // Register the entity sets needed by OpenIddict.
                 // Note: use the generic overload if you need
