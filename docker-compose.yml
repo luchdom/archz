@@ -18,6 +18,13 @@ services:
       - POSTGRES_USER=citizix_user
       - POSTGRES_DB=citizix_db
 
+  archz.users.api:
+    image: ${DOCKER_REGISTRY-}archzusersapi
+    build:
+      context: .
+      dockerfile: src/Services/Users/Archz.Users.Api/Dockerfile
+
 networks:
   archz:
     driver: bridge
+

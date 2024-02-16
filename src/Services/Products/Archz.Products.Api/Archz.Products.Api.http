@@ -1,0 +1,6 @@
+@Archz.Products.Api_HostAddress = http://localhost:5211
+
+GET {{Archz.Products.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

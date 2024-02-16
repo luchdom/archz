@@ -13,19 +13,18 @@ Sample implementation of an enterprise application architecture with a collectio
 - Integration and Unit Tests
 
 ### To Do
-- [ ] Functions
+- [ ] Features
 	- [ ] Login
 	- [ ] Register
+	- [ ] CRUD products
 	- [ ] Create order
-	- [ ] List order (with filters)
+	- [ ] List order
 - [ ] Seed database
 - [ ] Observability
 	- [ ] Logs with Serilog
 	- [ ] APM tool
 - [ ] Authentication and authorization
-	- [ ] OpenIddict
 	- [ ] JWT Token
-	- [ ] MFA: OTP
 - [ ] CQRS
 	- [ ] Mediator
 	- [ ] Caching/Read database
@@ -35,19 +34,8 @@ Sample implementation of an enterprise application architecture with a collectio
 	- [ ] Unit
 	- [ ] Integration
 - [ ] Correlate logs between microservices http requests
-- [ ] Add user secrets
 
 ## Getting Started
-
-Run on base project folder to update database
-```
-dotnet ef database update
-```
-
-To add a new migration
-```
-dotnet ef migrations add <name> --context Arch.Auth.Api.Infra.ApplicationDbContext
-```
 
 Run services and databases
 ```
