@@ -1,13 +1,13 @@
-﻿using Archz.Users.Api.Domain.AggregateModels.UserAggregate;
+﻿using Archz.Users.Api.Application.Services;
+using Archz.Users.Api.Domain.AggregateModels.UserAggregate;
 using FluentResults;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using OrderManager.Api.Application.Services;
 using System.Data;
 
 namespace Archz.Users.Api.Application.Commands.RegisterUser
 {
-    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Result>
+    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Result<int>>
     {
         private readonly ILogger<LoginUserCommandHandler> _logger;
         private readonly UserManager<User> _userManager;
@@ -22,13 +22,13 @@ namespace Archz.Users.Api.Application.Commands.RegisterUser
             _userManager = userManager;
             _tokenService = tokenService;
         }
-        public async Task<Result> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result<int>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             var user = new User { UserName = request.Email, Email = request.Email };
             var result = await _userManager.CreateAsync(user, request.Password);
 
             if (result.Succeeded)
-                return Result.Ok();
+                return Result.Ok(user.Id);
 
             var errors = result.Errors
                .Select(errors => new Error(errors.Description))

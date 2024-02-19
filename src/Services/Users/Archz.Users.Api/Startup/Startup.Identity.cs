@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Archz.Users.Api.Domain.AggregateModels.RoleAggregate;
 
 namespace Archz.Users.Api;
 
@@ -21,7 +22,7 @@ internal static partial class Startup
     private static IServiceCollection AddIdentityProvider(this IServiceCollection services)
     {
         services
-            .AddIdentity<User, IdentityRole<int>>(options =>
+            .AddIdentity<User, Role>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.User.RequireUniqueEmail = true;
@@ -41,7 +42,7 @@ internal static partial class Startup
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             })
-            .AddRoles<IdentityRole<int>>()
+            .AddRoles<Role>()
             .AddEntityFrameworkStores<AppDbContext>();
         return services;
     }

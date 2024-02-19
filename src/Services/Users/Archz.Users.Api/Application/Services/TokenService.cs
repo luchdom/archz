@@ -6,29 +6,31 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace OrderManager.Api.Application.Services;
+namespace Archz.Users.Api.Application.Services;
 
 public interface ITokenService
 {
-    (string token, DateTime ValidTo) CreateToken(User user);
+    (string Token, DateTime ValidTo) CreateToken(User user, IList<string> roles);
 }
 public class TokenService : ITokenService
 {
     private readonly ILogger<TokenService> _logger;
     private readonly JwtTokenSettings _jwtTokenSettings;
 
-    public TokenService(ILogger<TokenService> logger, IOptions<JwtTokenSettings> options)
+    public TokenService(
+        ILogger<TokenService> logger,
+        IOptions<JwtTokenSettings> options)
     {
         _logger = logger;
         _jwtTokenSettings = options.Value;
     }
 
-    public (string token, DateTime ValidTo) CreateToken(User user)
+    public (string Token, DateTime ValidTo) CreateToken(User user, IList<string> roles)
     {
         _logger.LogInformation("Creating JWT token for user {UserId}", user.Id);
         var expiration = DateTime.UtcNow.AddMinutes(_jwtTokenSettings.ExpirationMinutes);
         var token = CreateJwtToken(
-            CreateClaims(user),
+            CreateClaims(user, roles),
             CreateSigningCredentials(),
             expiration
         );
@@ -49,7 +51,7 @@ public class TokenService : ITokenService
             signingCredentials: credentials
         );
 
-    private List<Claim> CreateClaims(User user)
+    private List<Claim> CreateClaims(User user, IList<string> roles)
     {
         try
         {
@@ -62,6 +64,9 @@ public class TokenService : ITokenService
                 new(ClaimTypes.Name, user.UserName),
                 new(ClaimTypes.Email, user.Email)
             };
+
+            foreach (var role in roles)
+                claims.Add(new(ClaimTypes.Role, role));
 
             return claims;
         }

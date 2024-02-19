@@ -1,30 +1,21 @@
 version: '3.4'
 
 services:
-  archz.auth.api:
-    image: ${DOCKER_REGISTRY-}archzauthapi
-    build:
-      context: .
-      dockerfile: src/Services/Auth/Archz.Auth.Api/Dockerfile
-
-  postgres:
-    image: postgres:14-alpine
-    ports:
-      - 5432:5432
-    volumes:
-      - ~/apps/postgres:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=S3cret
-      - POSTGRES_USER=citizix_user
-      - POSTGRES_DB=citizix_db
-
   archz.users.api:
     image: ${DOCKER_REGISTRY-}archzusersapi
     build:
       context: .
       dockerfile: src/Services/Users/Archz.Users.Api/Dockerfile
+    depends_on:
+      - sql-server
 
-networks:
-  archz:
-    driver: bridge
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SystemAdmin@#$123
+
+
 

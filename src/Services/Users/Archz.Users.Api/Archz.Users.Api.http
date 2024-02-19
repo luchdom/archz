@@ -1,6 +1,15 @@
-@Archz.Users.Api_HostAddress = http://localhost:5093
+@Archz.Users.Api_HostAddress = http://localhost:8080
 
-GET {{Archz.Users.Api_HostAddress}}/weatherforecast/
+
+
+POST {{Archz.Users.Api_HostAddress}}/v1/auth/signup/
+Content-Type: application/json
 Accept: application/json
+
+{
+    "email": "user1@test.com",
+    "password": "Test@135",
+    "passwordConfirmation" : "Test@135"
+}
 
 ###

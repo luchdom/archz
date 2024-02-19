@@ -1,8 +1,9 @@
+using Archz.Users.Api.Application.Commands.LoginUser;
 using FluentValidation;
 
 namespace Archz.Users.Api.Application.Commands.RegisterUser;
 
-public class LoginUserCommandValidator : AbstractValidator<RegisterUserCommand>
+public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
 {
     public LoginUserCommandValidator()
     {

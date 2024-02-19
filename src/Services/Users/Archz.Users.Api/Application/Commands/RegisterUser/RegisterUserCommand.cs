@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Archz.Users.Api.Application.Commands.RegisterUser
 {
-    public class RegisterUserCommand : IRequest<Result>
+    public class RegisterUserCommand : IRequest<Result<int>>
     {
         public string Email { get; set; }
 

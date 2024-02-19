@@ -1,9 +1,11 @@
-﻿using Archz.Users.Api.Application.Commands.LoginUser;
+﻿using Archz.Application.Core.Extensions;
+using Archz.Users.Api.Application.Commands.LoginUser;
+using Archz.Users.Api.Application.Services;
 using Archz.Users.Api.Domain.AggregateModels.UserAggregate;
 using FluentResults;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using OrderManager.Api.Application.Services;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace Archz.Users.Api.Application.Commands.RegisterUser
@@ -25,7 +27,27 @@ namespace Archz.Users.Api.Application.Commands.RegisterUser
         }
         public async Task<Result<LoginUserCommandResponse>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            return Result.Ok();
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user is null)
+            {
+                return Result.Fail("Invalid credentials");
+            }
+
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password!);
+            if (!isPasswordValid)
+            {
+                return Result.Fail("Invalid credentials");
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var createdToken = _tokenService.CreateToken(user, userRoles);
+
+            return Result.Ok(new LoginUserCommandResponse
+            {
+                AccessToken = createdToken.Token,
+                ExpiresIn = createdToken.ValidTo.ToTimestamp()
+            });
          }
     }
 }

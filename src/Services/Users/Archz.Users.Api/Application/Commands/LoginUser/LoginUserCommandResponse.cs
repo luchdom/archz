@@ -8,5 +8,5 @@ public class LoginUserCommandResponse
     public string AccessToken { get; set; }
 
     [JsonPropertyName("expires_in")]
-    public int ExpiresIn { get; set; }
+    public long ExpiresIn { get; set; }
 }
