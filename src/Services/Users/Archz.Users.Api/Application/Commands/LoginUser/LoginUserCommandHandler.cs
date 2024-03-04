@@ -27,12 +27,14 @@ namespace Archz.Users.Api.Application.Commands.RegisterUser
         }
         public async Task<Result<LoginUserCommandResponse>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
+            _logger.LogDebug("Finding user by email {Email}.", request.Email);
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user is null)
             {
                 return Result.Fail("Invalid credentials");
             }
 
+            _logger.LogDebug("Validating credentials of user with email {Email}.", request.Email);
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password!);
             if (!isPasswordValid)
             {
@@ -40,7 +42,6 @@ namespace Archz.Users.Api.Application.Commands.RegisterUser
             }
 
             var userRoles = await _userManager.GetRolesAsync(user);
-
             var createdToken = _tokenService.CreateToken(user, userRoles);
 
             return Result.Ok(new LoginUserCommandResponse

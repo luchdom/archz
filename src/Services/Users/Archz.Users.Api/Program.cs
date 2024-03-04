@@ -1,4 +1,5 @@
 
+using Archz.Application.Core.Startup;
 namespace Archz.Users.Api;
 
 public class Program
@@ -8,9 +9,8 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-
         builder.Services
-            .AddCore()
+            .AddCore<Program>()
             .AddCustomSettings(builder.Configuration)
             .AddCustomDbContext(builder.Configuration)
             .AddIdentity(builder.Configuration)
@@ -20,7 +20,7 @@ public class Program
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
         {
             app.UseSwagger();
             app.UseSwaggerUI();

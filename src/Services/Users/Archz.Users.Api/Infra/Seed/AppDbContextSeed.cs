@@ -15,10 +15,9 @@ public class AppDbContextSeed(
     public async Task<bool> SeedAsync()
     {
         logger.LogInformation("Migrating database");
+        //For non-productive environments only
         await dbContext.Database.MigrateAsync();
 
-        var t1 = await userManager.Users.AnyAsync();
-        var test = await roleManager.Roles.AnyAsync();
         if (!await roleManager.Roles.AnyAsync())
         {
             logger.LogInformation("Creating default roles");
@@ -44,7 +43,7 @@ public class AppDbContextSeed(
             if (result.Succeeded) 
             {
                 logger.LogInformation("Adding default admin user to role Admin");
-                await userManager.AddToRoleAsync(defaultUser, Role.Admin.Name);
+                await userManager.AddToRoleAsync(defaultUser, Role.Admin.Name!);
             }
             
         }

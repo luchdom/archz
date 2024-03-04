@@ -1,4 +1,4 @@
-
+using Archz.Application.Core.Startup;
 namespace Archz.Products.Api;
 
 public class Program
@@ -8,11 +8,13 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services
+            .AddCore<Program>()
+            .AddCustomSettings(builder.Configuration)
+            .AddCustomDbContext(builder.Configuration)
+            .AddIdentity(builder.Configuration)
+            .AddCustomHealthChecks(builder.Configuration)
+            .AddCustomServices();
 
         var app = builder.Build();
 
@@ -25,8 +27,8 @@ public class Program
 
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
         app.UseAuthorization();
-
 
         app.MapControllers();
 

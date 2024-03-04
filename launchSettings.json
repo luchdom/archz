@@ -5,7 +5,8 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "archz.auth.api": "StartDebugging",
-        "archz.users.api": "StartDebugging"
+        "archz.users.api": "StartDebugging",
+        "archz.products.api": "StartDebugging"
       }
     }
   }

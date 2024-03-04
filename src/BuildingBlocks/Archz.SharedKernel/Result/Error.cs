@@ -8,7 +8,7 @@ namespace Archz.SharedKernel.Result;
 public  class Error : IError
 {
     /// <summary>
-    /// Create a instance of Error with a StatusCode 400
+    /// Create a instance of Error
     /// </summary>
     /// <param name="code">Error code</param>
     /// <param name="message">Descritive message</param>
@@ -16,7 +16,7 @@ public  class Error : IError
     {
         Code = code;
         Message = message;
-        Details = new List<Error>();
+        Details = [];
     }
 
     public string Code { get; }

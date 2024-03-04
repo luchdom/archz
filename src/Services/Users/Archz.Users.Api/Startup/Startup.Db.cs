@@ -1,6 +1,5 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Archz.Users.Api.Infra;
 using Archz.Users.Api.Settings;
 

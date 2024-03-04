@@ -1,6 +1,6 @@
 ﻿namespace Archz.Users.Api.Settings;
 
-public class ConnectionStringsSettings
+public sealed class ConnectionStringsSettings
 {
     public const string Database = "Database";
 }

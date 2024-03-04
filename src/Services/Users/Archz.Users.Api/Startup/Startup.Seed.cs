@@ -18,9 +18,7 @@ internal static partial class Startup
         using (var scope = scopedFactory?.CreateScope())
         {
             var service = scope!.ServiceProvider.GetService<AppDbContextSeed>();
-            //var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-            //var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
-            await service.SeedAsync();
+            await service!.SeedAsync();
         }
     }
 }

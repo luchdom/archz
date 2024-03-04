@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Archz.Users.Api.Domain.AggregateModels.UserAggregate;
 using Archz.Users.Api.Infra;
 using Archz.Users.Api.Settings;
@@ -66,7 +65,7 @@ internal static partial class Startup
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtTokenSettings.ValidIssuer,
+                    ValidIssuer = jwtTokenSettings!.ValidIssuer,
                     ValidAudience = jwtTokenSettings.ValidAudience,
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(jwtTokenSettings.SymmetricSecurityKey)

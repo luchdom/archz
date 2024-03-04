@@ -7,9 +7,9 @@ services:
       context: .
       dockerfile: src/Services/Users/Archz.Users.Api/Dockerfile
     depends_on:
-      - sql-server
+      - sql-server-users
 
-  sql-server:
+  sql-server-users:
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
       - "1433:1433"
@@ -17,5 +17,19 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=SystemAdmin@#$123
 
+  archz.products.api:
+    image: ${DOCKER_REGISTRY-}archzproductsapi
+    build:
+      context: .
+      dockerfile: src/Services/Products/Archz.Products.Api/Dockerfile
+    depends_on:
+      - sql-server-products
 
+  sql-server-products:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SystemAdmin@#$123
 

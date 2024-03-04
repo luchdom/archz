@@ -13,10 +13,9 @@ namespace Archz.Users.Api.Controllers;
 [ApiController]
 [Route("/v{version:apiVersion}/[controller]")]
 [ApiVersion(ApiVersion)]
-public class AuthController(IMediator mediator, IOptions<UsersApiSettings> settings) : BaseController
+public class AuthController(IMediator mediator) : BaseController
 {
     private readonly IMediator _mediator = mediator;
-    private readonly IOptions<UsersApiSettings> settings = settings;
     private const string ApiVersion = "1";
 
     [HttpPost]
@@ -29,6 +28,8 @@ public class AuthController(IMediator mediator, IOptions<UsersApiSettings> setti
         var result = await _mediator.Send(command);
         if (result.IsFailed)
             return ValidationProblem(result);
+
+        //You can ask for EmailConfirmation and only return Created (201) here
 
         return await Login(new LoginUserCommand() { Email = command.Email, Password = command.Password });
     }

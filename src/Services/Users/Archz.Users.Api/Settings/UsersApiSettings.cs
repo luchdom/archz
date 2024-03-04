@@ -2,7 +2,7 @@
 
 namespace Archz.Users.Api.Settings;
 
-public class UsersApiSettings
+public sealed class UsersApiSettings
 {
     public const string Settings = "Settings";
 

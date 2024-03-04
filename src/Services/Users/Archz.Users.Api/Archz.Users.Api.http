@@ -1,7 +1,5 @@
 @Archz.Users.Api_HostAddress = http://localhost:8080
 
-
-
 POST {{Archz.Users.Api_HostAddress}}/v1/auth/signup/
 Content-Type: application/json
 Accept: application/json
@@ -10,6 +8,17 @@ Accept: application/json
     "email": "user1@test.com",
     "password": "Test@135",
     "passwordConfirmation" : "Test@135"
+}
+
+###
+
+POST {{Archz.Users.Api_HostAddress}}/v1/auth/sigin/
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "user1@test.com",
+    "password": "Test@135",
 }
 
 ###

@@ -14,8 +14,8 @@ Sample implementation of an enterprise application architecture with a collectio
 
 ### To Do
 - [ ] Features
-	- [ ] Login
-	- [ ] Register
+	- [x] Login
+	- [x] Register
 	- [ ] CRUD products
 	- [ ] Create order
 	- [ ] List order
@@ -23,8 +23,8 @@ Sample implementation of an enterprise application architecture with a collectio
 - [ ] Observability
 	- [ ] Logs with Serilog
 	- [ ] APM tool
-- [ ] Authentication and authorization
-	- [ ] JWT Token
+- [x] Authentication and authorization
+	- [x] JWT Token 
 - [ ] CQRS
 	- [ ] Mediator
 	- [ ] Caching/Read database
