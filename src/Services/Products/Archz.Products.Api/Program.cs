@@ -1,9 +1,10 @@
 using Archz.Application.Core.Startup;
+using Archz.Users.Api;
 namespace Archz.Products.Api;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +20,11 @@ public class Program
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+            await app.SeedData(builder.Configuration);
         }
 
         app.UseHttpsRedirection();

@@ -1,3 +1,5 @@
+using Archz.Products.Api.Infra.Seed;
+
 namespace Archz.Users.Api;
 
 internal static partial class Startup
@@ -7,10 +9,10 @@ internal static partial class Startup
         var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
         using (var scope = scopedFactory?.CreateScope())
         {
-            //var service = scope!.ServiceProvider.GetService<AppDbContextSeed>();
+            var service = scope!.ServiceProvider.GetService<AppDbContextSeed>();
             ////var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
             ////var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
-            //await service.SeedAsync();
+            await service.SeedAsync();
         }
     }
 }

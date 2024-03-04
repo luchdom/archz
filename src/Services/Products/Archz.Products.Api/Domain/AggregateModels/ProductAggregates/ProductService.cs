@@ -18,7 +18,7 @@ public class ProductService : IProductService
     {
         if(await _productRepository.ExistsWithSameNameAsync(name, cancellationToken))
         {
-            Result.Fail("There is alread a product with the same name");
+            Result.Fail("There is already a product with the same name");
         }
 
         return Product.Create(name, price);
