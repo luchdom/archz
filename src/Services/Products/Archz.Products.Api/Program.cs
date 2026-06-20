@@ -1,5 +1,4 @@
 using Archz.Application.Core.Startup;
-using Archz.Users.Api;
 namespace Archz.Products.Api;
 
 public class Program

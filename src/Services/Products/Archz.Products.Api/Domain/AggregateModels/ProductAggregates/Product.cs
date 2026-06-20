@@ -15,6 +15,7 @@ public sealed class Product : Entity
     public string Name { get; private set; }
     public decimal Price { get; private set; }
     public bool IsActive { get; set; }
+    public Guid? ConcurrencyStamp { get; set; } = Guid.NewGuid();
 
     public static Result<Product> Create(string name, decimal price)
     {

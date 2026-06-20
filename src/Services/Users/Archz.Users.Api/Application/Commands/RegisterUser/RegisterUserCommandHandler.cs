@@ -25,7 +25,7 @@ namespace Archz.Users.Api.Application.Commands.RegisterUser
         public async Task<Result<int>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             var user = new User { UserName = request.Email, Email = request.Email };
-            var result = await _userManager.CreateAsync(user, request.Password);
+            var result = await _userManager.CreateAsync(user, request.Password!);
 
             if (result.Succeeded)
                 return Result.Ok(user.Id);

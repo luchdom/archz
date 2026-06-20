@@ -28,7 +28,7 @@ namespace Archz.Users.Api.Application.Commands.RegisterUser
         public async Task<Result<LoginUserCommandResponse>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
             _logger.LogDebug("Finding user by email {Email}.", request.Email);
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userManager.FindByEmailAsync(request.Email!);
             if (user is null)
             {
                 return Result.Fail("Invalid credentials");

@@ -5,7 +5,7 @@ namespace Archz.Users.Api.Application.Commands.LoginUser;
 public class LoginUserCommandResponse
 {
     [JsonPropertyName("access_token")]
-    public string AccessToken { get; set; }
+    public required string AccessToken { get; set; }
 
     [JsonPropertyName("expires_in")]
     public long ExpiresIn { get; set; }

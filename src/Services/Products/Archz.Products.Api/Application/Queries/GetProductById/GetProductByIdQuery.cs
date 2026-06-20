@@ -1,7 +1,6 @@
-﻿using MediatR;
+using Archz.Products.Api.Application;
+using MediatR;
 
 namespace Archz.Products.Api.Application.Queries.GetProductById;
 
-public class GetProductByIdQuery: IRequest<ProductDto>
-{
-}
+public sealed record GetProductByIdQuery(int Id) : IRequest<ProductDto?>;

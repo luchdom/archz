@@ -34,9 +34,9 @@ Products uses an explicit write/read DbContext split:
 - `AppWriteDbContext`: tracks aggregates and implements `IUnitOfWork`.
 - `AppReadDbContext`: configured as no-tracking and intended for read-side models.
 
-The write context applies configurations from `Infra/EntityConfigurations/Write`. The read context applies configurations from `Infra/EntityConfigurations/Read`, which is currently empty.
+The write context applies configurations from `Infra/EntityConfigurations/Write`. The read context applies configurations from `Infra/EntityConfigurations/Read`.
 
-`ProductRepository` writes through `AppWriteDbContext`. Product read queries are not implemented yet.
+`ProductRepository` writes through `AppWriteDbContext`. Product read queries use `AppReadDbContext` with `ProductReadModel`.
 
 ## Migrations
 
@@ -68,7 +68,9 @@ Run EF commands from the relevant service project folder or pass `--project` and
 
 The shared `Entity` base class can collect domain events. Products adds `ProductCreatedEvent` when a product is created.
 
-Event dispatch is pending. Do not document or rely on domain events being published to handlers, queues, or external services until dispatch is implemented.
+Products dispatches collected domain events through MediatR after `AppWriteDbContext.SaveChangesAsync` succeeds, then clears the events from tracked entities.
+
+External publication is still pending. Do not document or rely on domain events being published to queues or external services until an outbox or message broker integration is implemented.
 
 ## Auditing
 

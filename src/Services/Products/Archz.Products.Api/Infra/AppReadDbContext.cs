@@ -1,10 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Archz.Products.Api.Infra.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Archz.Products.Api.Infra;
 
-internal sealed class AppReadDbContext(DbContextOptions<AppReadDbContext> options)
+public sealed class AppReadDbContext(DbContextOptions<AppReadDbContext> options)
     : DbContext(options)
 {
+    public DbSet<ProductReadModel> Products { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(

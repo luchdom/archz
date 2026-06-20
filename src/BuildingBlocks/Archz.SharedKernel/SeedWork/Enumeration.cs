@@ -27,14 +27,14 @@ public abstract class Enumeration : IComparable
         return fields.Select(f => f.GetValue(null)).Cast<T>();
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         var otherValue = obj as Enumeration;
 
-        if (otherValue == null)
+        if (otherValue is null)
             return false;
 
-        var typeMatches = GetType().Equals(obj.GetType());
+        var typeMatches = GetType().Equals(otherValue.GetType());
         var valueMatches = Id.Equals(otherValue.Id);
 
         return typeMatches && valueMatches;
@@ -70,5 +70,11 @@ public abstract class Enumeration : IComparable
         return matchingItem;
     }
 
-    public int CompareTo(object other) => Id.CompareTo(((Enumeration)other).Id);
+    public int CompareTo(object? other)
+    {
+        if (other is not Enumeration otherValue)
+            throw new ArgumentException("Object is not a valid enumeration value.", nameof(other));
+
+        return Id.CompareTo(otherValue.Id);
+    }
 }

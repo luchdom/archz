@@ -39,6 +39,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Archz.Application.Core\Archz.Application.Core.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Archz.SharedKernel\Archz.SharedKernel.csproj" />
   </ItemGroup>
 
 </Project>

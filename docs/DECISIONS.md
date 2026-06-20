@@ -32,7 +32,7 @@ Local development uses Docker Compose to run API services and SQL Server contain
 
 ### Domain Event Dispatch
 
-Entities can collect domain events, but dispatch is not implemented. Decide whether dispatch should happen inside EF Core save changes, through MediatR notifications, through an outbox, or through a message broker.
+Products dispatches domain events in-process from EF Core save changes through MediatR notifications. Decide whether cross-service events should use an outbox, a message broker, or both.
 
 ### Async Messaging
 
@@ -40,7 +40,7 @@ The README names MassTransit as a planned item. Decide broker, message contracts
 
 ### Read Model Strategy
 
-Products has an `AppReadDbContext`, but read models and read configurations are not implemented. Decide whether reads use the same SQL database, projections, cache, or a separate read database.
+Products has an `AppReadDbContext` and read model for product list and lookup queries. Decide whether future reads continue using the same SQL database or move to projections, cache, or a separate read database.
 
 ### Observability
 

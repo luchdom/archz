@@ -62,7 +62,9 @@ Command handlers coordinate domain services, repositories, and unit of work. The
 
 Queries live under `Application/Queries/<UseCase>`.
 
-The Products service already has query folders, but the handlers currently throw `NotImplementedException`. Future query implementations should use read-side models or `AppReadDbContext` where appropriate.
+The Products service implements list and lookup queries through `AppReadDbContext` and read-side models. Future query implementations should use read-side models or `AppReadDbContext` where appropriate.
+
+Read models should be sealed records with a primary constructor when they only represent query-shaped data and do not need behavior.
 
 ## Validation
 
@@ -79,7 +81,7 @@ Domain code should model business behavior:
 - Domain services can coordinate checks that need repositories.
 - Domain events can be added to entities through `Entity.AddDomainEvent`.
 
-Domain event dispatch is not implemented yet, so events currently represent intent rather than runtime integration behavior.
+Products dispatches domain events in-process from `AppWriteDbContext` after a successful save. This is not external messaging; use a future outbox or message broker integration for cross-service events.
 
 ## Infrastructure
 
