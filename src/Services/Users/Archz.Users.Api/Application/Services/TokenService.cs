@@ -55,14 +55,19 @@ public class TokenService : ITokenService
     {
         try
         {
+            var email = user.Email
+                ?? throw new InvalidOperationException("User email is required to create a token.");
+            var userName = user.UserName
+                ?? throw new InvalidOperationException("User name is required to create a token.");
+
             var claims = new List<Claim>
             {
-                new(JwtRegisteredClaimNames.Sub, user.Email),
+                new(JwtRegisteredClaimNames.Sub, email),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
                 new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new(ClaimTypes.Name, user.UserName),
-                new(ClaimTypes.Email, user.Email)
+                new(ClaimTypes.Name, userName),
+                new(ClaimTypes.Email, email)
             };
 
             foreach (var role in roles)

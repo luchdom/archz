@@ -1,7 +1,6 @@
-﻿using MediatR;
+using Archz.Products.Api.Application;
+using MediatR;
 
 namespace Archz.Products.Api.Application.Queries.GetProducts;
 
-public class GetProductsQuery: IRequest<IEnumerable<ProductDto>>
-{
-}
+public sealed record GetProductsQuery : IRequest<IReadOnlyCollection<ProductDto>>;

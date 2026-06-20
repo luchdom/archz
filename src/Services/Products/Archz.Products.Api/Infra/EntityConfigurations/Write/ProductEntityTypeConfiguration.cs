@@ -26,5 +26,8 @@ public class ProductEntityTypeConfiguration : IEntityTypeConfiguration<Product>
            .IsRequired()
            .HasDefaultValue(false);
 
+        builder.Property(x => x.ConcurrencyStamp)
+            .IsConcurrencyToken();
+
     }
 }

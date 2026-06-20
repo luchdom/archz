@@ -11,7 +11,7 @@ dotnet build Archz.sln
 Current status:
 
 - Build succeeds.
-- Build emits warnings.
+- Build emits 4 warnings.
 - No committed test projects were found.
 - `.github/workflows` exists but no workflow files were found.
 

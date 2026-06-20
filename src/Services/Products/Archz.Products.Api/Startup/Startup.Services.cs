@@ -1,5 +1,6 @@
 using Archz.Products.Api.Domain.AggregateModels.ProductAggregates;
 using Archz.Products.Api.Infra;
+using Archz.Products.Api.Infra.Interceptors;
 using Archz.Products.Api.Infra.Repositories;
 using Archz.Products.Api.Infra.Seed;
 using Archz.SharedKernel.SeedWork;
@@ -12,6 +13,7 @@ internal static partial class Startup
     {
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<AppWriteDbContext>());
         services.AddScoped<AppDbContextSeed>();
+        services.AddSingleton<UpdateAuditableInterceptor>();
 
         services.AddScoped<IProductRepository, ProductRepository>();
 

@@ -63,12 +63,14 @@ Implemented:
 - JWT creation in Users and JWT validation in Users and Products.
 - ASP.NET Core Identity persistence for Users.
 - Product aggregate, repository, EF Core write context, and create product command.
+- Product list and lookup queries through the Products read context.
+- In-process domain event dispatch from the Products write context after successful saves.
 - Docker Compose for Users, Products, and separate SQL Server containers.
 
 Partially implemented:
 
-- DDD aggregate and domain event pattern. Entities can collect domain events, but dispatch is not implemented.
-- CQRS. Commands are present and Products has separate read/write DbContext types, but read queries are not implemented.
+- DDD aggregate and domain event pattern. Entities can collect domain events and Products dispatches them in-process, but no external messaging or outbox exists.
+- CQRS. Products has separate read/write DbContext types and read queries, but there is no separate read database, cache, or projection pipeline.
 - Auditing. `IAuditable` and an EF interceptor exist, but coverage depends on entities implementing the interface.
 - Orders service structure. The folders exist, but the service remains scaffolded.
 
@@ -76,7 +78,7 @@ Planned or pending:
 
 - Integration and unit tests.
 - Observability with structured logs, APM, and cross-service request correlation.
-- Async event processing, including MassTransit.
+- Async event processing, including MassTransit and an outbox/integration event strategy.
 - Read database, cache, or projection layer.
 - Complete product CRUD and order features.
 

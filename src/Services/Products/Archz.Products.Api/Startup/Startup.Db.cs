@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Archz.Products.Api.Infra;
+using Archz.Products.Api.Infra.Interceptors;
 
 namespace Archz.Products.Api;
 
@@ -12,7 +13,7 @@ internal static partial class Startup
         string connectionString = configuration.GetConnectionString("Database")!;
 
         services
-            .AddDbContext<AppWriteDbContext>(options =>
+            .AddDbContext<AppWriteDbContext>((sp, options) =>
             {
                 options
                 .UseSqlServer(connectionString,
@@ -21,7 +22,8 @@ internal static partial class Startup
                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                     })
-                .UseSnakeCaseNamingConvention();
+                .UseSnakeCaseNamingConvention()
+                .AddInterceptors(sp.GetRequiredService<UpdateAuditableInterceptor>());
                 //TODO - AddInterceptors to trigger domain events
             },
             ServiceLifetime.Scoped);
