@@ -806,3 +806,6 @@ fabric.properties
 
 *.tar
 *.zip
+
+# Local planning/workflow notes
+docs-ai/
