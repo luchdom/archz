@@ -28,6 +28,14 @@ Services use EF Core with SQL Server. Users uses ASP.NET Core Identity storage. 
 
 Local development uses Docker Compose to run API services and SQL Server containers for Users and Products.
 
+### Test Harness Taxonomy
+
+Tests use xUnit. Behavioral tests should enter through a real adapter such as an HTTP controller or future message consumer and replace only boundary dependencies such as repositories, units of work, message buses, and external providers. Products is the first implemented example.
+
+Integration tests should enter through HTTP routes when testing API services. The current Products integration tests use EF Core InMemory for fast local execution and keep the real repository/unit-of-work flow. SQL Server container tests are reserved for provider-specific behavior.
+
+Architecture tests use reflection and protect implemented rules only. Planned architecture should be documented as pending instead of encoded as a failing rule.
+
 ## Pending Decisions
 
 ### Domain Event Dispatch
@@ -46,13 +54,13 @@ Products has an `AppReadDbContext` and read model for product list and lookup qu
 
 The README lists Serilog, APM, and cross-service request correlation as planned. Decide logging library, correlation ID propagation, tracing backend, metrics, and local development defaults.
 
-### Testing Strategy
-
-No test projects are committed. Decide test framework, naming, fixture style, integration database strategy, and CI requirements.
-
 ### Orders Service Scope
 
 Orders exists as a scaffolded API. Decide the first aggregate boundaries, commands, queries, and service dependencies before implementation.
+
+### Test CI Requirements
+
+Decide the GitHub Actions workflow and whether all tests or only fast local tests should run on every pull request.
 
 ### Secrets And Configuration
 

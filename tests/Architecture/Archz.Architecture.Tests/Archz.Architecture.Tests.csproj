@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.5.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Services\Users\Archz.Users.Api\Archz.Users.Api.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\Products\Archz.Products.Api\Archz.Products.Api.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\Orders\Archz.Orders.Api\Archz.Orders.Api.csproj" />
+    <ProjectReference Include="..\..\..\src\BuildingBlocks\Archz.Application.Core\Archz.Application.Core.csproj" />
+    <ProjectReference Include="..\..\..\src\BuildingBlocks\Archz.SharedKernel\Archz.SharedKernel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

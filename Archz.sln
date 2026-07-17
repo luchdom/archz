@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
@@ -33,6 +33,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Archz.SharedKernel", "src\B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Archz.Application.Core", "src\BuildingBlocks\Archz.Application.Core\Archz.Application.Core.csproj", "{14B9EBDC-4D82-43B8-8F61-C95F2ADD17B1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{4353066B-F410-E540-F593-55E469B78A5F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Products", "Products", "{F09918D7-1823-A51F-6030-75B8A5434615}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Archz.Products.Tests", "tests\Services\Products\Archz.Products.Tests\Archz.Products.Tests.csproj", "{3829894C-24CA-4D27-92BE-482CC26DF2ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Architecture", "Architecture", "{875CD587-DE2F-08EE-74FB-D6BE4E474EF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Archz.Architecture.Tests", "tests\Architecture\Archz.Architecture.Tests\Archz.Architecture.Tests.csproj", "{8408CFDE-01FA-4FF6-AD5D-BF87DF796962}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +75,14 @@ Global
 		{14B9EBDC-4D82-43B8-8F61-C95F2ADD17B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14B9EBDC-4D82-43B8-8F61-C95F2ADD17B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14B9EBDC-4D82-43B8-8F61-C95F2ADD17B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3829894C-24CA-4D27-92BE-482CC26DF2ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3829894C-24CA-4D27-92BE-482CC26DF2ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3829894C-24CA-4D27-92BE-482CC26DF2ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3829894C-24CA-4D27-92BE-482CC26DF2ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8408CFDE-01FA-4FF6-AD5D-BF87DF796962}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8408CFDE-01FA-4FF6-AD5D-BF87DF796962}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8408CFDE-01FA-4FF6-AD5D-BF87DF796962}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8408CFDE-01FA-4FF6-AD5D-BF87DF796962}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +99,11 @@ Global
 		{CEADE34D-E60E-42E0-AC01-439EE59B7A25} = {213E04D0-F7A8-44A0-A39A-EBAAC84735EF}
 		{BE3F3723-F272-4EC2-BB42-5F6E22D4F835} = {554A4F0F-0A6D-40E1-AA10-05720DC39745}
 		{14B9EBDC-4D82-43B8-8F61-C95F2ADD17B1} = {554A4F0F-0A6D-40E1-AA10-05720DC39745}
+		{4353066B-F410-E540-F593-55E469B78A5F} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{F09918D7-1823-A51F-6030-75B8A5434615} = {4353066B-F410-E540-F593-55E469B78A5F}
+		{3829894C-24CA-4D27-92BE-482CC26DF2ED} = {F09918D7-1823-A51F-6030-75B8A5434615}
+		{875CD587-DE2F-08EE-74FB-D6BE4E474EF3} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{8408CFDE-01FA-4FF6-AD5D-BF87DF796962} = {875CD587-DE2F-08EE-74FB-D6BE4E474EF3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3AD44BDF-9332-4946-B27B-D0D24BDAC8FA}

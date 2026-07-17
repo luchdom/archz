@@ -12,6 +12,8 @@ The root `README.md` lists a broader target architecture. Some items are impleme
 - `src/Services/Orders/Archz.Orders.Api`: scaffolded API service with placeholder weather endpoint and folders for future application, domain, infrastructure, and settings code.
 - `src/BuildingBlocks/Archz.Application.Core`: shared ASP.NET Core and application-layer infrastructure.
 - `src/BuildingBlocks/Archz.SharedKernel`: shared DDD seedwork and result abstractions.
+- `tests/Services/Products/Archz.Products.Tests`: Products behavioral and integration tests that enter through HTTP routes.
+- `tests/Architecture/Archz.Architecture.Tests`: reflection-based architecture tests for service references, controller conventions, handler placement, and domain dependencies.
 
 ## Service Boundaries
 
@@ -65,6 +67,9 @@ Implemented:
 - Product aggregate, repository, EF Core write context, and create product command.
 - Product list and lookup queries through the Products read context.
 - In-process domain event dispatch from the Products write context after successful saves.
+- Products behavioral HTTP tests with repository/unit-of-work fakes at the boundary.
+- Products integration HTTP tests with real MediatR, validators, handlers, repository, unit of work, and EF Core InMemory persistence.
+- Architecture tests for current service and building-block dependency rules.
 - Docker Compose for Users, Products, and separate SQL Server containers.
 
 Partially implemented:
@@ -76,7 +81,9 @@ Partially implemented:
 
 Planned or pending:
 
-- Integration and unit tests.
+- Users authentication tests.
+- Message queue behavioral tests.
+- SQL Server/Testcontainers integration coverage for migrations and provider-specific persistence behavior.
 - Observability with structured logs, APM, and cross-service request correlation.
 - Async event processing, including MassTransit and an outbox/integration event strategy.
 - Read database, cache, or projection layer.

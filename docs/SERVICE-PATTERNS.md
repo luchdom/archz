@@ -99,3 +99,13 @@ Products currently has both `AppWriteDbContext` and `AppReadDbContext`. Users us
 ## Settings
 
 Configuration is represented by strongly typed classes under `Settings` and registered by service-local startup code. Development settings include local/demo values only and should not be treated as production secrets.
+
+## Test Patterns
+
+Committed tests use xUnit.
+
+Behavioral service tests should enter through HTTP routes with `WebApplicationFactory<TProgram>`. Keep controllers, MediatR, validators, handlers, and domain services real. Replace only boundaries such as repositories, units of work, message buses, or external providers. The Products behavioral tests demonstrate this by replacing `IProductRepository` and `IUnitOfWork` while keeping `CreateProductCommandHandler` and `ProductService` real.
+
+Integration service tests should also enter through HTTP routes. The current Products integration tests replace SQL Server DbContexts with EF Core InMemory contexts to keep the harness fast and local while exercising the real repository and unit of work. Use provider-specific SQL Server or container tests when the scenario depends on migrations, SQL translation, precision, transactions, identity generation, or relational constraints.
+
+Architecture tests live under `tests/Architecture` and should protect rules that are already implemented. Do not make planned architecture fail the build until the implementation exists.

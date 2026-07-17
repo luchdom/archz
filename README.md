@@ -10,7 +10,7 @@ Sample implementation of an enterprise application architecture with a collectio
 - Authentication and authorization
 - Fail fast validations
 - EF Core Code First
-- Integration and Unit Tests
+- Integration, behavioral, and architectural tests
 
 ### To Do
 - [ ] Features
@@ -31,8 +31,11 @@ Sample implementation of an enterprise application architecture with a collectio
 - [ ] Events/async processing
 	- [ ] MassTransit 
 - [ ] Tests
-	- [ ] Unit
-	- [ ] Integration
+	- [x] Behavioral/API scenario tests for Products
+	- [x] Architectural tests for current service boundaries
+	- [x] Integration tests for Products with in-process EF Core persistence
+	- [ ] Users authentication tests
+	- [ ] Queue/message-driven tests
 - [ ] Correlate logs between microservices http requests
 
 ## Getting Started

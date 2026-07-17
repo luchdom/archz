@@ -16,6 +16,23 @@ dotnet build Archz.sln
 
 The solution currently builds successfully, but it emits warnings. See `docs/QUALITY.md` for the current validation baseline.
 
+## Tests
+
+From the repository root:
+
+```sh
+dotnet test Archz.sln
+```
+
+Targeted test commands:
+
+```sh
+dotnet test tests/Services/Products/Archz.Products.Tests/Archz.Products.Tests.csproj
+dotnet test tests/Architecture/Archz.Architecture.Tests/Archz.Architecture.Tests.csproj
+```
+
+The committed Products integration tests use EF Core InMemory and do not require Docker or local SQL Server. Docker is still required to run the API services with their development SQL Server containers.
+
 ## Run With Docker Compose
 
 From the repository root:
@@ -70,5 +87,6 @@ Use the relevant context:
 ## Current Local Gaps
 
 - Orders is not wired into `docker-compose.yml`.
-- There are no committed test projects.
 - There are no committed GitHub Actions workflow files.
+- There are no SQL Server container-based test fixtures yet.
+- There are no message queue test fixtures yet.
