@@ -36,7 +36,8 @@ Controllers should stay thin:
 - Use `[ApiController]`.
 - Use versioned routes like `/v{version:apiVersion}/[controller]`.
 - Inject `IMediator`.
-- Send commands or queries.
+- Bind JSON bodies to a top-level record class named `<UseCase>Request` in `Controllers/Requests/<UseCase>Request.cs`.
+- Map the HTTP request to the existing application command or query before sending it through MediatR.
 - Convert failed `FluentResults` through `BaseController.ValidationProblem`.
 - Avoid business rules inside controller actions.
 
@@ -44,6 +45,10 @@ Examples:
 
 - `ProductsController`
 - `AuthController`
+
+Keep an existing action parameter name when MVC exposes it in model-binding errors.
+
+Keep one top-level class or record class per handwritten backend C# file. A partial class may span files. Each file still contains one top-level class declaration. The architecture suite checks these rules for the service projects and shared building blocks.
 
 ## Commands
 

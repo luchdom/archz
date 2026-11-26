@@ -1,12 +1,11 @@
 ﻿using Archz.Application.Core;
 using Archz.Users.Api.Application.Commands.LoginUser;
 using Archz.Users.Api.Application.Commands.RegisterUser;
-using Archz.Users.Api.Settings;
+using Archz.Users.Api.Controllers.Requests;
 using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace Archz.Users.Api.Controllers;
 
@@ -23,15 +22,20 @@ public class AuthController(IMediator mediator) : BaseController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(typeof(LoginUserCommandResponse), StatusCodes.Status200OK)]
-    public async Task<IResult> SignUp([FromBody] RegisterUserCommand command)
+    public async Task<IResult> SignUp([FromBody] RegisterUserRequest command)
     {
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(new RegisterUserCommand
+        {
+            Email = command.Email,
+            Password = command.Password,
+            PasswordConfirmation = command.PasswordConfirmation
+        });
         if (result.IsFailed)
             return ValidationProblem(result);
 
         //You can ask for EmailConfirmation and only return Created (201) here
 
-        return await Login(new LoginUserCommand() { Email = command.Email, Password = command.Password });
+        return await Login(new LoginUserCommand { Email = command.Email, Password = command.Password });
     }
 
     [HttpPost]
@@ -39,8 +43,8 @@ public class AuthController(IMediator mediator) : BaseController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(typeof(LoginUserCommandResponse), StatusCodes.Status200OK)]
-    public async Task<IResult> SignIn([FromBody] LoginUserCommand command) 
-        => await Login(command);
+    public async Task<IResult> SignIn([FromBody] LoginUserRequest command)
+        => await Login(new LoginUserCommand { Email = command.Email, Password = command.Password });
 
     [NonAction]
     private async Task<IResult> Login(LoginUserCommand command)
