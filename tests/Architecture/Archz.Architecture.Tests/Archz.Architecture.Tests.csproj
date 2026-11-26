@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <Target Name="CollectArchitectureCompilerInputs" BeforeTargets="PrepareForBuild">
-    <MSBuild Projects="@(ProjectReference)"
+    <MSBuild Projects="@(ProjectReference->WithoutMetadataValue('OutputItemType', 'Analyzer'))"
              Targets="GetArchitectureCompilerInputs"
              Properties="Configuration=$(Configuration);CustomAfterMicrosoftCommonTargets=$(MSBuildProjectDirectory)/ArchitectureCompilerInputs.targets"
              BuildInParallel="true">
