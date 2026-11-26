@@ -22,6 +22,13 @@ Do not claim a broader test layer exists until the relevant test project has bee
 
 New work should avoid adding warnings. If warnings are introduced or rediscovered during clean builds, cleanup work should reduce them deliberately and document behavior-affecting changes.
 
+## Empty collection expressions
+
+Use `[]` for empty collections when the target type supports it. The .NET
+build and test commands fail with `IDE0301` when a call such as
+`Array.Empty<T>()` can use a collection expression. Use an explicit array
+type when a call site needs to preserve that type.
+
 ## Test Strategy
 
 Committed test projects:

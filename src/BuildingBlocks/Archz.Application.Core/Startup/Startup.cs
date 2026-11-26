@@ -69,7 +69,7 @@ public static partial class Startup
                              Id="Bearer"
                          }
                      },
-                     Array.Empty<string>()
+                     (string[])[]
                  }
              });
         });
