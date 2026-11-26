@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json;
 using Archz.Products.Api.Application;
 using Archz.Products.Tests.Fixtures;
 
@@ -77,5 +78,22 @@ public sealed class CreateProductBehavioralTests
         Assert.Equal(0, factory.Boundary.ExistsCalls);
         Assert.Equal(0, factory.Boundary.InsertCalls);
         Assert.Equal(0, factory.Boundary.SaveChangesCalls);
+    }
+
+    [Fact]
+    public async Task Null_request_body_uses_the_existing_model_binding_error_keys()
+    {
+        using var factory = new ProductsBehavioralFactory();
+        using var client = factory.CreateClient();
+
+        var response = await client.PostAsJsonAsync<object?>("/v1/products", null);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        using var problem = await response.Content.ReadFromJsonAsync<JsonDocument>();
+        Assert.NotNull(problem);
+        var errors = problem.RootElement.GetProperty("errors");
+        Assert.Equal("A non-empty request body is required.", errors.GetProperty("")[0].GetString());
+        Assert.Equal("The command field is required.", errors.GetProperty("command")[0].GetString());
+        Assert.Equal(0, factory.Boundary.InsertCalls);
     }
 }

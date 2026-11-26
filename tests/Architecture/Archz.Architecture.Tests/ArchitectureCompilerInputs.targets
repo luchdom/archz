@@ -1,0 +1,16 @@
+<Project>
+  <Target Name="GetArchitectureCompilerInputs"
+          DependsOnTargets="AddImplicitDefineConstants"
+          Returns="@(ArchitectureCompilerInput)">
+    <PropertyGroup>
+      <ArchitectureCompilerSymbols>$(DefineConstants.Replace(';', ','))</ArchitectureCompilerSymbols>
+    </PropertyGroup>
+    <ItemGroup>
+      <ArchitectureCompilerInput Include="@(Compile->'%(FullPath)')">
+        <AssemblyName>$(AssemblyName)</AssemblyName>
+        <ProjectDirectory>$(MSBuildProjectDirectory)</ProjectDirectory>
+        <CompilerSymbols>$(ArchitectureCompilerSymbols)</CompilerSymbols>
+      </ArchitectureCompilerInput>
+    </ItemGroup>
+  </Target>
+</Project>

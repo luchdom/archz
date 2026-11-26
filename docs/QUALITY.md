@@ -12,7 +12,7 @@ dotnet test Archz.sln
 Current status:
 
 - Build succeeds.
-- Latest `dotnet build Archz.sln` validation completed with 0 warnings.
+- A clean .NET 8 build reports existing nullable-reference warnings in `Archz.SharedKernel`.
 - Committed tests exist for Products behavioral/integration scenarios and solution architecture rules.
 - `.github/workflows` exists but no workflow files were found.
 
@@ -38,6 +38,10 @@ Committed test projects:
   - Domain types must not depend on application, infrastructure, controller, startup, or settings namespaces.
   - Command/query handlers must live under matching application namespaces.
   - Building blocks must not reference service assemblies.
+  - MVC JSON body request types must be top-level `*Request` record classes in matching C# files under the owning service’s `Controllers/Requests` folder.
+  - Each handwritten backend C# file may declare at most one top-level class or record class. The test reads the C# inputs and active symbols from the build, and skips sources with an auto-generated header.
+
+Treat failures in architecture tests as implementation defects. A change that weakens, skips, or removes a rule requires a recorded architecture decision approved by a repository owner and an independent Staff Engineer review. Record the decision in [Decisions](DECISIONS.md) and update the owning guidance and tests together.
 
 Targeted commands:
 

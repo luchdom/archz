@@ -13,7 +13,7 @@ The root `README.md` lists a broader target architecture. Some items are impleme
 - `src/BuildingBlocks/Archz.Application.Core`: shared ASP.NET Core and application-layer infrastructure.
 - `src/BuildingBlocks/Archz.SharedKernel`: shared DDD seedwork and result abstractions.
 - `tests/Services/Products/Archz.Products.Tests`: Products behavioral and integration tests that enter through HTTP routes.
-- `tests/Architecture/Archz.Architecture.Tests`: reflection-based architecture tests for service references, controller conventions, handler placement, and domain dependencies.
+- `tests/Architecture/Archz.Architecture.Tests`: architecture tests for service references, controller conventions, handler placement, domain dependencies, and [backend source rules](QUALITY.md#test-strategy).
 
 ## Service Boundaries
 
@@ -43,8 +43,8 @@ Services should own their own application, domain, infrastructure, settings, sta
 
 The implemented service flow is:
 
-1. Controller receives an HTTP request.
-2. Controller sends a MediatR command or query.
+1. Controller receives an HTTP request and binds any JSON body to a service-local request record.
+2. Controller maps the input to a MediatR command or query and sends it.
 3. FluentValidation validators run through `ValidationBehavior`.
 4. Logging runs through `LoggingBehavior`.
 5. Handler coordinates domain services, repositories, and unit of work.

@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.26" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
@@ -27,5 +29,21 @@
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
+
+  <Target Name="CollectArchitectureCompilerInputs" BeforeTargets="PrepareForBuild">
+    <MSBuild Projects="@(ProjectReference)"
+             Targets="GetArchitectureCompilerInputs"
+             Properties="Configuration=$(Configuration);CustomAfterMicrosoftCommonTargets=$(MSBuildProjectDirectory)/ArchitectureCompilerInputs.targets"
+             BuildInParallel="true">
+      <Output TaskParameter="TargetOutputs" ItemName="ArchitectureCompilerInput" />
+    </MSBuild>
+    <WriteLinesToFile File="$(IntermediateOutputPath)ArchitectureCompilerInputs.txt"
+                      Lines="@(ArchitectureCompilerInput->'%(AssemblyName)|%(CompilerSymbols)|%(ProjectDirectory)|%(Identity)')"
+                      Overwrite="true"
+                      WriteOnlyWhenDifferent="true" />
+    <ItemGroup>
+      <EmbeddedResource Include="$(IntermediateOutputPath)ArchitectureCompilerInputs.txt" LogicalName="ArchitectureCompilerInputs" />
+    </ItemGroup>
+  </Target>
 
 </Project>

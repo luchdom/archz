@@ -3,6 +3,7 @@ using Archz.Products.Api.Application;
 using Archz.Products.Api.Application.Commands.CreateProduct;
 using Archz.Products.Api.Application.Queries.GetProductById;
 using Archz.Products.Api.Application.Queries.GetProducts;
+using Archz.Products.Api.Controllers.Requests;
 using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -39,9 +40,9 @@ public class ProductsController(IMediator mediator) : BaseController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
-    public async Task<IResult> CreateProduct([FromBody] CreateProductCommand command)
+    public async Task<IResult> CreateProduct([FromBody] CreateProductRequest command)
     {
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(new CreateProductCommand(command.Name, command.Price));
         if (result.IsFailed)
             return ValidationProblem(result);
 
