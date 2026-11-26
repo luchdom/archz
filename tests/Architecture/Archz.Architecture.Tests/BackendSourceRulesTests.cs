@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -26,8 +27,8 @@ public sealed class BackendSourceRulesTests
 
         Assert.NotEmpty(bodies);
         var violations = bodies
-            .Where(body => !IsRequestRecord(body.ParameterType))
-            .Select(body => $"{body.DisplayName}: put {body.ParameterType.FullName} in a top-level record class named *Request in its matching .cs file.")
+            .Where(body => !IsRequestRecord(body.ControllerAssembly, body.ParameterType))
+            .Select(body => $"{body.DisplayName}: put {body.ParameterType.FullName} in a top-level *Request record class under Controllers/Requests in {body.ControllerAssembly.GetName().Name}.")
             .Order(StringComparer.Ordinal)
             .ToArray();
         Assert.True(violations.Length == 0, string.Join(Environment.NewLine, violations));
@@ -47,7 +48,7 @@ public sealed class BackendSourceRulesTests
         Assert.True(violations.Length == 0, string.Join(Environment.NewLine, violations));
     }
 
-    private static IReadOnlyList<(string? DisplayName, Type ParameterType)> GetJsonBodies<TProgram>()
+    private static IReadOnlyList<(string? DisplayName, Assembly ControllerAssembly, Type ParameterType)> GetJsonBodies<TProgram>()
         where TProgram : class
     {
         var assemblyName = typeof(TProgram).Assembly.GetName().Name;
@@ -60,7 +61,7 @@ public sealed class BackendSourceRulesTests
             .Where(AcceptsJson)
             .SelectMany(action => action.Parameters
                 .Where(parameter => parameter.BindingInfo?.BindingSource == BindingSource.Body)
-                .Select(parameter => (action.DisplayName, parameter.ParameterType)))
+                .Select(parameter => (action.DisplayName, action.ControllerTypeInfo.Assembly, parameter.ParameterType)))
             .Distinct()
             .ToArray();
     }
@@ -78,16 +79,17 @@ public sealed class BackendSourceRulesTests
                 mediaType.Suffix.Equals("json", StringComparison.OrdinalIgnoreCase));
     }
 
-    private static bool IsRequestRecord(Type type)
+    private static bool IsRequestRecord(Assembly controllerAssembly, Type type)
     {
         var name = type.Name.Split('`')[0];
-        if (!name.EndsWith("Request", StringComparison.Ordinal) || type.IsNested)
+        if (type.Assembly != controllerAssembly || type.IsNested || !name.EndsWith("Request", StringComparison.Ordinal))
             return false;
 
+        var requestPath = Path.Combine("Controllers", "Requests", $"{name}.cs");
         var metadataType = type.IsConstructedGenericType ? type.GetGenericTypeDefinition() : type;
         return Sources
-            .Where(source => source.AssemblyName == type.Assembly.GetName().Name &&
-                Path.GetFileName(source.Path) == $"{name}.cs")
+            .Where(source => source.AssemblyName == controllerAssembly.GetName().Name &&
+                Path.GetRelativePath(source.ProjectDirectory, source.Path) == requestPath)
             .SelectMany(source => source.TopLevelClasses)
             .Any(declaration => declaration is RecordDeclarationSyntax &&
                 BackendSourceFile.MetadataFullName(declaration) == metadataType.FullName);

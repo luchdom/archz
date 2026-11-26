@@ -38,10 +38,10 @@ Committed test projects:
   - Domain types must not depend on application, infrastructure, controller, startup, or settings namespaces.
   - Command/query handlers must live under matching application namespaces.
   - Building blocks must not reference service assemblies.
-  - MVC JSON body request types must be top-level record classes named `*Request` in matching C# files.
+  - MVC JSON body request types must be top-level `*Request` record classes in matching C# files under the owning service’s `Controllers/Requests` folder.
   - Each handwritten backend C# file may declare at most one top-level class or record class. The test reads the C# inputs and active symbols from the build, and skips sources with an auto-generated header.
 
-Treat failures in architecture tests as implementation defects. A change that weakens or removes a rule requires an explicit architecture decision and reviewer approval. Record the decision in [Decisions](DECISIONS.md) and update the owning guidance and tests together.
+Treat failures in architecture tests as implementation defects. A change that weakens, skips, or removes a rule requires a recorded architecture decision approved by a repository owner and an independent Staff Engineer review. Record the decision in [Decisions](DECISIONS.md) and update the owning guidance and tests together.
 
 Targeted commands:
 
