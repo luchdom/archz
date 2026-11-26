@@ -1,5 +1,6 @@
 <Project>
-  <PropertyGroup>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-  </PropertyGroup>
+  <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj' and '$(MSBuildProjectName)' != 'CollectionExpressions.Analyzers'">
+    <ProjectReference Include="$(MSBuildThisFileDirectory)tools/CollectionExpressions.Analyzers/CollectionExpressions.Analyzers.csproj"
+                      OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+  </ItemGroup>
 </Project>
